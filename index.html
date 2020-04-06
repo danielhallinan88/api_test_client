@@ -7,11 +7,21 @@
   </head>
   <body>
     <h1>TESTS</h1>
-    <img src="me.jpg" alt="file not found" id="me">
+
+    <div>
+      <label>Select file to upload</label>
+      <input type="file">
+    </div>
+    <button type="submit">SUBMIT</button>
+
+    <img src="images/test_image_1.jpg" alt="digit file not found" id="digit">
+    <div id="img_copy1"></div>
+
+    <img src="images/german_shephard.jpg" alt="dog file not found" id="dog">
     <canvas id="canvas" width="460" height="460" id="meCanvas"></canvas>
 
     <p><button onclick="myCanvas()">Try it</button></p>
   </body>
 
-  <script type="text/javascript" src="processing2.js"></script>
+  <script type="text/javascript" src="scripts/app.js"></script>
 </html>
