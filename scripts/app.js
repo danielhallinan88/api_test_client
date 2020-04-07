@@ -1,4 +1,4 @@
-function digit_predict(){
+function digitPredict(){
 
   // Create new image element to ensure image is read.
   const digitImage = document.getElementById('digit');
@@ -39,7 +39,8 @@ function addImageToLocalStorage(digitImage) {
 }
 
 function getFile(){
-  const input = document.querySelector('input[type="file"]');
+  //const input = document.querySelector('input[type="file"]');
+  const input = document.getElementById('digit_img_upload');
   const file = input.files[0];
   return file;
 }
@@ -53,8 +54,9 @@ function post(){
   console.log(data.get('image'));
 
   // Alter IP as needed
-  const ip = '18.188.117.189';
+  const ip = '18.219.145.57';
   const url = `http://${ip}:8888/mnist`;
+  //console.log(url);
 
   fetch(url, {
     method: 'POST',
@@ -66,10 +68,25 @@ function post(){
   })
   .then(function(json) {
     console.log(json);
+    const prediction = json['prediction'];
+    resultDiv = document.getElementById('digit_result');
+    const output = document.createElement('p');
+    output.innerText = `Prediction: ${prediction}`;
+    resultDiv.append(output);
   })
   .catch(function(error){
     console.log(error);
   })
 }
 
-digit_predict();
+function dogPredict() {
+  const dogInput = document.getElementById('dogImgUpload');
+  console.log(dogInput);
+
+  // input.addEventListener("change", function() {
+  //   post();
+  // });
+}
+
+digitPredict();
+dogPredict();
