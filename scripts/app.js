@@ -1,12 +1,17 @@
 function digitPredict(){
 
   // Create new image element to ensure image is read.
-  const digitImage = document.getElementById('digit');
-  addImageToLocalStorage(digitImage);
+  //const digitImage = document.getElementById('digit');
+  //addImageToLocalStorage(digitImage);
 
-  const input = document.querySelector('input[type="file"]')
+  const digitInput = document.getElementById('digitImgUpload');
+  const digitImgOutput = document.getElementById('digitImgOutput');
 
-  input.addEventListener("change", function() {
+  //const input = document.querySelector('input[type="file"]')
+
+  digitInput.addEventListener("change", function() {
+  //input.addEventListener("change", function() {
+    digitImgOutput.src = URL.createObjectURL(event.target.files[0]);
     const apiType = 'digit';
     post(apiType);
   });
@@ -44,7 +49,7 @@ function getFile(apiType){
   let inputId;
 
   if (apiType === 'digit') {
-    inputId = 'digit_img_upload';
+    inputId = 'digitImgUpload';
   } else if (apiType === 'dog') {
     inputId = 'dogImgUpload';
   }
@@ -52,6 +57,10 @@ function getFile(apiType){
   const input = document.getElementById(inputId);
   const file = input.files[0];
   return file;
+}
+
+function stringToBool(str){
+  return (str) === 'True' ? true : false;
 }
 
 function post(apiType){
@@ -63,19 +72,27 @@ function post(apiType){
   console.log(data.get('image'));
 
   // Alter IP as needed
-  const ip = '18.217.162.1';
+  const ip = '3.134.80.51';
   const socket = `http://${ip}:8888/`;
   let endPoint;
+  let resultDivId;
 
   if (apiType === 'digit'){
     endPoint = 'mnist';
+    resultDivId = 'digit_result';
   } else if (apiType === 'dog'){
     endPoint = 'dog-classifier';
+    resultDivId = 'dog_result';
   }
 
   const url = `${socket}${endPoint}`;
-  //const url = `http://${ip}:8888/mnist`;
   console.log(url);
+
+  resultDiv = document.getElementById(resultDivId);
+  resultDiv.innerText = 'Retrieving Prediction';
+  //const output = document.createElement('p');
+  //output.innerText = `Retrieving Prediction`;
+  //resultDiv.append(output);
 
   fetch(url, {
     method: 'POST',
@@ -90,15 +107,17 @@ function post(apiType){
 
     if (apiType === 'digit'){
       const prediction = json['prediction'];
-      resultDiv = document.getElementById('digit_result');
-      const output = document.createElement('p');
-      output.innerText = `Prediction: ${prediction}`;
-      resultDiv.append(output);
+      //resultDiv = document.getElementById('digit_result');
+      //const output = document.createElement('p');
+      resultDiv.innerText = `Prediction: ${prediction}`;
+      //output.innerText = `Prediction: ${prediction}`;
+      //resultDiv.append(output);
     } else if (apiType === 'dog'){
       const breed = json['dog_breed'];
-      const is_dog = json['is_dog'];
-      const is_human = json['is_human'];
+      const is_dog = stringToBool(json['is_dog']);
+      const is_human = stringToBool(json['is_human']);
       let outputText;
+      console.log(is_dog);
 
       if(is_dog){
         outputText = `That looks like a ${breed}`;
@@ -109,10 +128,12 @@ function post(apiType){
           outputText = "I don't know what that is."
         }
       }
-      resultDiv = document.getElementById('dog_result');
-      const output = document.createElement('p');
-      output.innerText = outputText;
-      resultDiv.append(output);
+      //resultDiv = document.getElementById('dog_result');
+      //const output = document.createElement('p');
+      
+      //output.innerText = outputText;
+      //resultDiv.append(output);
+      resultDiv.innerText = outputText;
     }
 
   })
@@ -123,9 +144,10 @@ function post(apiType){
 
 function dogPredict() {
   const dogInput = document.getElementById('dogImgUpload');
-  console.log(dogInput);
+  const dogImgOutput = document.getElementById('dogImgOutput');
 
   dogInput.addEventListener("change", function() {
+    dogImgOutput.src = URL.createObjectURL(event.target.files[0]);
     const apiType = 'dog'
     post(apiType);
   });
