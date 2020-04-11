@@ -7,10 +7,7 @@ function digitPredict(){
   const digitInput = document.getElementById('digitImgUpload');
   const digitImgOutput = document.getElementById('digitImgOutput');
 
-  //const input = document.querySelector('input[type="file"]')
-
   digitInput.addEventListener("change", function() {
-  //input.addEventListener("change", function() {
     digitImgOutput.src = URL.createObjectURL(event.target.files[0]);
     const apiType = 'digit';
     post(apiType);
@@ -45,7 +42,6 @@ function addImageToLocalStorage(digitImage) {
 }
 
 function getFile(apiType){
-  //const input = document.querySelector('input[type="file"]');
   let inputId;
 
   if (apiType === 'digit') {
@@ -53,7 +49,7 @@ function getFile(apiType){
   } else if (apiType === 'dog') {
     inputId = 'dogImgUpload';
   }
-  //const input = document.getElementById('digit_img_upload');
+
   const input = document.getElementById(inputId);
   const file = input.files[0];
   return file;
@@ -90,9 +86,6 @@ function post(apiType){
 
   resultDiv = document.getElementById(resultDivId);
   resultDiv.innerText = 'Retrieving Prediction';
-  //const output = document.createElement('p');
-  //output.innerText = `Retrieving Prediction`;
-  //resultDiv.append(output);
 
   fetch(url, {
     method: 'POST',
@@ -107,17 +100,13 @@ function post(apiType){
 
     if (apiType === 'digit'){
       const prediction = json['prediction'];
-      //resultDiv = document.getElementById('digit_result');
-      //const output = document.createElement('p');
       resultDiv.innerText = `Prediction: ${prediction}`;
-      //output.innerText = `Prediction: ${prediction}`;
-      //resultDiv.append(output);
+
     } else if (apiType === 'dog'){
       const breed = json['dog_breed'];
       const is_dog = stringToBool(json['is_dog']);
       const is_human = stringToBool(json['is_human']);
       let outputText;
-      console.log(is_dog);
 
       if(is_dog){
         outputText = `That looks like a ${breed}`;
@@ -125,14 +114,10 @@ function post(apiType){
         if(is_human){
           outputText = `That person looks like a ${breed}`;
         } else {
-          outputText = "I don't know what that is."
+          outputText = `I don't know what that is, but looks kind of like a ${breed}`
         }
       }
-      //resultDiv = document.getElementById('dog_result');
-      //const output = document.createElement('p');
-      
-      //output.innerText = outputText;
-      //resultDiv.append(output);
+
       resultDiv.innerText = outputText;
     }
 
