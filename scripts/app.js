@@ -10,7 +10,7 @@ function digitPredict(){
   digitInput.addEventListener("change", function() {
     digitImgOutput.src = URL.createObjectURL(event.target.files[0]);
     const apiType = 'digit';
-    post(apiType);
+    post(apiType, 'none');
   });
 }
 
@@ -59,8 +59,15 @@ function stringToBool(str){
   return (str) === 'True' ? true : false;
 }
 
-function post(apiType){
-  const file = getFile(apiType);
+function post(apiType, thisFile){
+  let file
+  if (thisFile === 'none') {
+    file = getFile(apiType);
+  } else {
+    file = thisFile;
+  }
+  
+  console.log(file);
 
   // Create form object to send.
   const data = new FormData();
@@ -68,7 +75,7 @@ function post(apiType){
   console.log(data.get('image'));
 
   // Alter IP as needed
-  const ip = '3.134.80.51';
+  const ip = '3.19.56.46';
   const socket = `http://${ip}:8888/`;
   let endPoint;
   let resultDivId;
@@ -134,7 +141,7 @@ function dogPredict() {
   dogInput.addEventListener("change", function() {
     dogImgOutput.src = URL.createObjectURL(event.target.files[0]);
     const apiType = 'dog'
-    post(apiType);
+    post(apiType, 'none');
   });
 }
 
@@ -161,6 +168,41 @@ function draw(e) {
   ctx.stroke(); // draw it!
 }
 
+function clearCanvas(ctx, canvas){
+  clearBtn = document.getElementById('clearBtn');
+  clearBtn.addEventListener('click', function (e){
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+  });
+}
+
+function dataURLtoFile(dataurl, filename) {
+  var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+      while(n--){
+          u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, {type:mime});
+  }
+
+function canvasToImg(){
+  const canvas = document.getElementById("canvas");
+  const dataUrl = canvas.toDataURL("image/jpeg");
+  // const img = new Image();
+  // img.src = dataUrl;
+  // console.log(img.src);
+
+  const file = dataURLtoFile(dataUrl, 'canvas_digit.jpg');
+  console.log(file);
+  post('digit', file);
+}
+
+function submitCanvas(){
+  submitBtn = document.getElementById('submitBtn');
+  submitBtn.addEventListener('click', function (e){
+    canvasToImg();
+  });
+}
+
 digitPredict();
 dogPredict();
 
@@ -173,3 +215,5 @@ document.addEventListener('mousemove', draw);
 document.addEventListener('mousedown', setPosition);
 document.addEventListener('mouseenter', setPosition);
 
+clearCanvas(ctx, canvas);
+submitCanvas();
