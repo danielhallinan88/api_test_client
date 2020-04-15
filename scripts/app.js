@@ -67,12 +67,12 @@ function post(apiType, thisFile){
     file = thisFile;
   }
   
-  console.log(file);
+  //console.log(file);
 
   // Create form object to send.
   const data = new FormData();
   data.append('image', file);
-  console.log(data.get('image'));
+  //console.log(data.get('image'));
 
   // Alter IP as needed
   const ip = '3.19.56.46';
@@ -184,22 +184,26 @@ function dataURLtoFile(dataurl, filename) {
       return new File([u8arr], filename, {type:mime});
   }
 
-function canvasToImg(){
-  const canvas = document.getElementById("canvas");
+function canvasToImg(canvas){
   const dataUrl = canvas.toDataURL("image/jpeg");
-  // const img = new Image();
-  // img.src = dataUrl;
-  // console.log(img.src);
 
+  // const img = new Image();
+  // img.height = 28;
+  // img.width = 28;
+  // img.src = dataUrl;
+  // const imgDiv = document.getElementById('canvasDigitResult');
+  // imgDiv.appendChild(img);
+
+  //const file = dataURLtoFile(img.src, 'canvas_digit.jpg');
   const file = dataURLtoFile(dataUrl, 'canvas_digit.jpg');
   console.log(file);
   post('digit', file);
 }
 
-function submitCanvas(){
+function submitCanvas(canvas){
   submitBtn = document.getElementById('submitBtn');
   submitBtn.addEventListener('click', function (e){
-    canvasToImg();
+    canvasToImg(canvas);
   });
 }
 
@@ -216,4 +220,4 @@ document.addEventListener('mousedown', setPosition);
 document.addEventListener('mouseenter', setPosition);
 
 clearCanvas(ctx, canvas);
-submitCanvas();
+submitCanvas(canvas);
