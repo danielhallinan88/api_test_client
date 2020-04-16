@@ -75,7 +75,7 @@ function post(apiType, thisFile){
   //console.log(data.get('image'));
 
   // Alter IP as needed
-  const ip = '3.19.56.46';
+  const ip = '18.220.159.11';
   const socket = `http://${ip}:8888/`;
   let endPoint;
   let resultDivId;
@@ -187,14 +187,6 @@ function dataURLtoFile(dataurl, filename) {
 function canvasToImg(canvas){
   const dataUrl = canvas.toDataURL("image/jpeg");
 
-  // const img = new Image();
-  // img.height = 28;
-  // img.width = 28;
-  // img.src = dataUrl;
-  // const imgDiv = document.getElementById('canvasDigitResult');
-  // imgDiv.appendChild(img);
-
-  //const file = dataURLtoFile(img.src, 'canvas_digit.jpg');
   const file = dataURLtoFile(dataUrl, 'canvas_digit.jpg');
   console.log(file);
   post('digit', file);
