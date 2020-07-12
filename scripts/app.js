@@ -184,12 +184,41 @@ function dataURLtoFile(dataurl, filename) {
       return new File([u8arr], filename, {type:mime});
   }
 
+async function runModel(canvas) {
+  const model = await tf.loadLayersModel('https://danielhallinan-ml.s3.us-east-2.amazonaws.com/mnist/mnist-model-pythonconverted.json');
+  
+  const image = tf.browser.fromPixels(canvas)
+      .mean(2)
+      .toFloat()
+      .expandDims(-1);
+  
+  console.log(image);
+  console.log(image.shape);
+
+  const resized_image = tf.image.resizeBilinear(image, [28, 28]).reshape([1, 28, 28]);
+  //const resized_image = image.reshapeAs([1,28,28]);
+  //const resized_image = image.reshape([1, 28, 28]);
+  const prediction = model.predict(resized_image);
+  const answer = tf.argMax(prediction, 1).dataSync()[0];
+  console.log(answer);
+
+  newImg = new Image();
+  newImg.src = tf.browser.fromPixels(resized_image);
+  document.append(newImg);
+  
+  return answer;
+  
+}
+
 function canvasToImg(canvas){
   const dataUrl = canvas.toDataURL("image/jpeg");
 
   const file = dataURLtoFile(dataUrl, 'canvas_digit.jpg');
   console.log(file);
-  post('digit', file);
+  //post('digit', file);
+  
+  const answer = runModel(canvas);
+  console.log(answer);
 }
 
 function submitCanvas(canvas){
@@ -198,6 +227,7 @@ function submitCanvas(canvas){
     canvasToImg(canvas);
   });
 }
+
 
 digitPredict();
 dogPredict();
